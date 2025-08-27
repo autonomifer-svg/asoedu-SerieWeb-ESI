@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESI - Relatos para crecer</title>
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #f8fbff;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header con portada */
+        .portada-container {
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .portada-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Sinopsis general */
+        .sinopsis {
+            background-color: #fff;
+            padding: 40px;
+            margin: 30px 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: #2980b9;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .sinopsis p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: justify;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #b89c00;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn:hover {
+            background-color: #b89c00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Capítulos con fondos completos */
+        .capitulos {
+            padding: 0;
+        }
+        
+        .capitulo {
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        
+        .capitulo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1;
+        }
+        
+        .capitulo-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            padding: 60px 20px;
+        }
+        
+        .capitulo-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        
+        .capitulo-titulo {
+            font-size: 2.5rem;
+            color: #fff;
+            font-weight: bold;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .capitulo-lugar {
+            font-style: italic;
+            color: #ccc;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .capitulo p {
+            font-size: 1.2rem;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            margin: 20px auto;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #000;
+            max-width: 800px;
+        }
+        
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        
+        .video-placeholder:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .video-placeholder .play-button {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(255, 0, 0, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .video-placeholder .play-button:hover {
+            background-color: rgba(255, 0, 0, 1);
+            transform: scale(1.1);
+        }
+        
+        .video-placeholder .play-button::after {
+            content: "";
+            border-style: solid;
+            border-width: 15px 0 15px 26px;
+            border-color: transparent transparent transparent white;
+            margin-left: 5px;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+            z-index: 2;
+        }
+        
+        .video-warning {
+            text-align: center;
+            color: #ffcccc;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            background-color: rgba(255, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 4px;
+            display: none;
+            max-width: 800px;
+            margin: 10px auto;
+        }
+        
+        .btn-container {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        /* Footer simplificado */
+        .footer-image-container {
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .footer-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .capitulo-titulo {
+                font-size: 1.8rem;
+            }
+            
+            .video-placeholder .play-button {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .capitulo {
+                min-height: 80vh;
+            }
+            
+            .capitulo-content {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Portada solo con imagen -->
+    <div class="portada-container">
+        <img src="includes/imagenes/portada.jpg" alt="ESI - Relatos para crecer" class="portada-image">
+    </div>
+
+    <!-- Sinopsis general -->
+    <section class="sinopsis">
+        <div class="container">
+            <h2 class="section-title">SINOPSIS DE LA SERIE</h2>
+            <p>
+                En un país conservador como Paraguay, un grupo de madres y padres asiste a un taller de "Educación Sexual Integral" (ESI). 
+                Al principio están incómodos, llenos prejuicios y dudas. Pero poco a poco, empiezan a escuchar, understand y cuestionarse a sí mismos.
+                Ésta serie muestra cómo aprenden a acompañar mejor a sus hijas, especialmente, a quienes son parte de la diversidad. 
+                Una historia sobre el miedo, el cambio, el crecimiento y el amor familiar.
+            </p>
+        </div>
+    </section>
+
+    <!-- Capítulos -->
+    <section class="capitulos">
+        <!-- Tráiler -->
+        <div class="capitulo" id="trailer" style="background-image: url('includes/imagenes/fondo_trailer.jpg');">
+            <div class="container capitulo-content">
+                <div class="capitulo-header">
+                    <h3 class="capitulo-titulo">TRÁILER</h3>
+                </div>
+                <p>
+                    Un adelanto de la serie que muestra la esencia de esta conmovedora historia sobre educación sexual integral, 
+                    diversidad y amor familiar en el contexto paraguayo.
+                </p>
+                <div class="video-container">
+                    <div class="video-placeholder" style="background-image: url(https://img.youtube.com/vi/hcMoZ1Jh4BY/maxresdefault.jpg);" data-video-id="hcMoZ1Jh4BY">
+                        <div class="play-button"></div>
+                        <p style="color: white; margin-top: 10px;">Haz clic para reproducir</p>
+                    </div>
+                    <iframe id="iframe-hcMoZ1Jh4BY" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                </div>
+                <div class="video-warning" id="warning-hcMoZ1Jh4BY">
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/hcMoZ1Jh4BY" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capítulo 1 -->
+        <div class="capitulo" id="capitulo-1" style="background-image: url('includes/imagenes/fondo_capitulo_1.jpg');">
+            <div class="container capitulo-content">
+                <div class="capitulo-header">
+                    <h3 class="capitulo-titulo">SANDRA & ROXY</h3>
+                </div>
+                <p>
+                    Inesperado: el deseo genuino de aprender a entender a sus hijos, hijas e hijos.
+                    Un grupo de madres y padres asisten con dudas y prejuicios a su primer día en un taller de ESI. 
+                    Entre silencios incómodos, confesiones íntimas y risas nerviosas, empieza a tejerse algo inesperado.
+                </p>
+                <div class="video-container">
+                    <div class="video-placeholder" style="background-image: url(https://img.youtube.com/vi/SoIfnabHs0Y/maxresdefault.jpg);" data-video-id="SoIfnabHs0Y">
+                        <div class="play-button"></div>
+                        <p style="color: white; margin-top: 10px;">Haz clic para reproducir</p>
+                    </div>
+                    <iframe id="iframe-SoIfnabHs0Y" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                </div>
+                <div class="video-warning" id="warning-SoIfnabHs0Y">
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/SoIfnabHs0Y" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capítulo 2 -->
+        <div class="capitulo" id="capitulo-2" style="background-image: url('includes/imagenes/fondo_capitulo_2.jpg');">
+            <div class="container capitulo-content">
+                <div class="capitulo-header">
+                    <h3 class="capitulo-titulo">JOSÉ & BRUNO</h3>
+                </div>
+                <p class="capitulo-lugar"></p>
+                <p>
+                    José lucha internamente con la expresión artística de su hijo. Mientras tanto, nuevos integrantes se suman al grupo 
+                    y descubren que identidad y género no son lo mismo. Una obra de arte DRAG marcará un antes y un después en la vida de José y Bruno.
+                </p>
+                <div class="video-container">
+                    <div class="video-placeholder" style="background-image: url(https://img.youtube.com/vi/oOlprUVHG2c/maxresdefault.jpg);" data-video-id="oOlprUVHG2c">
+                        <div class="play-button"></div>
+                        <p style="color: white; margin-top: 10px;">Haz clic para reproducir</p>
+                    </div>
+                    <iframe id="iframe-oOlprUVHG2c" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                </div>
+                <div class="video-warning" id="warning-oOlprUVHG2c">
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/oOlprUVHG2c" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capítulo 3 -->
+        <div class="capitulo" id="capitulo-3" style="background-image: url('includes/imagenes/fondo_capitulo_3.jpg');">
+            <div class="container capitulo-content">
+                <div class="capitulo-header">
+                    <h3 class="capitulo-titulo">PATRICIA & CAMILA</h3>
+                </div>
+                <p>
+                    Escuchar, sin juzgar, puede cambiarlo todo.
+                    Una madre llega al taller luego de descubrir que un video íntimo de su hija se viralizó.
+                    Entre culpa, miedo y confusión, surgen temas difíciles: consentimiento, violencia digital y respeto.
+                </p>
+                <div class="video-container">
+                    <div class="video-placeholder" style="background-image: url(https://img.youtube.com/vi/Dcjw0bZ0ePU/maxresdefault.jpg);" data-video-id="Dcjw0bZ0ePU">
+                        <div class="play-button"></div>
+                        <p style="color: white; margin-top: 10px;">Haz clic para reproducir</p>
+                    </div>
+                    <iframe id="iframe-Dcjw0bZ0ePU" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                </div>
+                <div class="video-warning" id="warning-Dcjw0bZ0ePU">
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/Dcjw0bZ0ePU" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capítulo 4 -->
+        <div class="capitulo" id="capitulo-4" style="background-image: url('includes/imagenes/fondo_capitulo_4.jpg');">
+            <div class="container capitulo-content">
+                <div class="capitulo-header">
+                    <h3 class="capitulo-titulo">FÁTIMA, PABLO Y TIM</h3>
+                </div>
+                <p>
+                    El grupo se anima a ponerle nombre to lo que sienten y viven sus hijos. Por primera vez, las palabras LGBTQ+ 
+                    dejan de ser siglas para convertirse en personas concretas. La incomodidad se transforma en ternura y la vergüenza, en orgullo.
+                </p>
+                <div class="video-container">
+                    <div class="video-placeholder" style="background-image: url(https://img.youtube.com/vi/CWOrlED8Vu8/maxresdefault.jpg);" data-video-id="CWOrlED8Vu8">
+                        <div class="play-button"></div>
+                        <p style="color: white; margin-top: 10px;">Haz clic para reproducir</p>
+                    </div>
+                    <iframe id="iframe-CWOrlED8Vu8" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                </div>
+                <div class="video-warning" id="warning-CWOrlED8Vu8">
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/CWOrlED8Vu8" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Capítulo 5 -->
+        <div class="capitulo" id="capitulo-5" style="background-image: url('includes/imagenes/fondo_capitulo_5.jpg');">
+            <div class="container capitulo-content">
+                <div class="capitulo-header">
+                    <h3 class="capitulo-titulo">CARMEN & TODES</h3>
+                </div>
+                <p>
+                    A veces, educarse es volver a aprender a amar.
+                    Llega el cierre del taller. Familias e hijos se reencuentran desde otro lugar. Lo que parecía imposible, 
+                    empieza a florecer; confianza, entendimiento y acompañamiento real.
+                </p>
+                <div class="video-container">
+                    <div class="video-placeholder" style="background-image: url(https://img.youtube.com/vi/XG8MQ3TVn-8/maxresdefault.jpg);" data-video-id="XG8MQ3TVn-8">
+                        <div class="play-button"></div>
+                        <p style="color: white; margin-top: 10px;">Haz clic para reproducir</p>
+                    </div>
+                    <iframe id="iframe-XG8MQ3TVn-8" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
+                </div>
+                <div class="video-warning" id="warning-XG8MQ3TVn-8">
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/XG8MQ3TVn-8" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer simplificado con una sola imagen -->
+    <div class="footer-image-container">
+        <img src="includes/imagenes/baseweb.jpg" alt="Créditos de la serie" class="footer-image">
+    </div>
+
+    <script>
+        // JavaScript para la reproducción de videos
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Página cargada correctamente');
+            
+            // Configuración de los placeholders de video
+            const videoPlaceholders = document.querySelectorAll('.video-placeholder');
+            
+            videoPlaceholders.forEach(placeholder => {
+                placeholder.addEventListener('click', function() {
+                    console.log('Click en placeholder detectado');
+                    
+                    const videoId = this.getAttribute('data-video-id');
+                    const iframe = document.getElementById(`iframe-${videoId}`);
+                    const warning = document.getElementById(`warning-${videoId}`);
+                    
+                    console.log('Video ID:', videoId);
+                    
+                    if (!iframe) {
+                        console.error('No se encontró el iframe para:', videoId);
+                        return;
+                    }
+                    
+                    // Ocultar placeholder
+                    this.style.display = 'none';
+                    
+                    // Mostrar iframe con parámetros optimizados
+                    iframe.style.display = 'block';
+                    
+                    // URL del video con parámetros para mejor compatibilidad
+                    const videoUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1&enablejsapi=1`;
+                    
+                    iframe.src = videoUrl;
+                    
+                    console.log('Video cargado:', videoUrl);
+                    
+                    // Verificar después de un tiempo si el video se cargó correctamente
+                    setTimeout(() => {
+                        checkVideoLoad(iframe, warning, videoId, this);
+                    }, 3000);
+                });
+            });
+            
+            // Función para verificar si el video se cargó correctamente
+            function checkVideoLoad(iframe, warning, videoId, placeholder) {
+                console.log('Verificando carga del video:', videoId);
+                
+                iframe.onload = function() {
+                    console.log('Iframe cargado para:', videoId);
+                };
+                
+                iframe.onerror = function() {
+                    console.log('Error cargando iframe para:', videoId);
+                    showWarning(warning, videoId);
+                };
+                
+                // Backup: mostrar warning después de 10 segundos si hay problemas
+                setTimeout(() => {
+                    if (iframe.style.display === 'block') {
+                        console.log('Mostrando warning de respaldo para:', videoId);
+                        showWarning(warning, videoId);
+                    }
+                }, 10000);
+            }
+            
+            function showWarning(warning, videoId) {
+                if (warning) {
+                    warning.style.display = 'block';
+                    
+                    const youtubeLink = `https://www.youtube.com/watch?v=${videoId}`;
+                    warning.innerHTML = `Si el video no se reproduce correctamente, <a href="${youtubeLink}" target="_blank" style="color: #ffcccc; text-decoration: underline;">haz clic aquí para verlo en YouTube</a>`;
+                }
+            }
+            
+            // Agregar smooth scroll para enlaces internos
+            const internalLinks = document.querySelectorAll('a[href^="#"]');
+            internalLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

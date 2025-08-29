@@ -25,6 +25,88 @@
             padding: 0 20px;
         }
         
+        /* Nueva cabecera ASOEDHU */
+        .header-asoedhu {
+            background-color: #2980b9;
+            color: white;
+            padding: 15px 0;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .header-logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+        
+        .header-social {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .header-social a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header-social a:hover {
+            transform: scale(1.1);
+        }
+        
+        .header-social img {
+            transition: all 0.3s ease;
+        }
+        
+        .header-social a:hover img {
+            opacity: 0.8;
+        }
+        
+        .header-right {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        
+        .header-link {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            padding: 8px 15px;
+            border-radius: 4px;
+        }
+        
+        .header-link:hover {
+            background-color: #b89c00;
+            color: white;
+        }
+        
         /* Header con portada */
         .portada-container {
             width: 100%;
@@ -250,8 +332,32 @@
             display: block;
         }
         
-        /* Responsive */
+        /* Responsive para la cabecera */
         @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .header-left {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header-logo {
+                font-size: 1.5rem;
+            }
+            
+            .header-right {
+                gap: 15px;
+            }
+            
+            .header-link {
+                font-size: 0.9rem;
+                padding: 6px 12px;
+            }
+            
             .section-title {
                 font-size: 1.5rem;
             }
@@ -273,9 +379,44 @@
                 padding: 40px 20px;
             }
         }
+        
+        @media (max-width: 480px) {
+            .header-right {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .header-social {
+                gap: 10px;
+            }
+            
+            .header-social a {
+                font-size: 1.3rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Nueva cabecera ASOEDHU -->
+    <header class="header-asoedhu">
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="header-logo">ASOEDHU</h1>
+                <div class="header-social">
+                    <a href="https://www.facebook.com/share/1B27TwuY6H/" target="_blank" aria-label="Facebook">
+                        <img src="includes/imagenes/Facebook_Logo.jpg" alt="Facebook" style="width: 30px; height: 30px; border-radius: 4px;">
+                    </a>
+                    <a href="https://www.instagram.com/asoedhu?igsh=cml5N3J6bmE5a242" target="_blank" aria-label="Instagram">
+                        <img src="includes/imagenes/Instagram_logo.jpg" alt="Instagram" style="width: 30px; height: 30px; border-radius: 4px;">
+                    </a>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="https://drive.google.com/drive/folders/16BEqT0d7jYB5scQyoD9mfPjo0Utr6YP2?usp=drive_link" target="_blank" class="header-link">Multimedia</a>
+            </div>
+        </div>
+    </header>
+
     <!-- Portada solo con imagen -->
     <div class="portada-container">
         <img src="includes/imagenes/portada.jpg" alt="ESI - Relatos para crecer" class="portada-image">
@@ -409,7 +550,7 @@
                     <iframe id="iframe-CWOrlED8Vu8" src="about:blank" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: none;"></iframe>
                 </div>
                 <div class="video-warning" id="warning-CWOrlED8Vu8">
-                    Si el video no se reproduce, por favor <a href="https://youtu.be/CWOrlED8Vu8" target="_blank" style="color: #ffcccc;">haz clic aquí para verlo en YouTube</a>
+                    Si el video no se reproduce, por favor <a href="https://youtu.be/CWOrlED8Vu8" target="_blank" style="color: #ffcccc;">haz clik aquí para verlo en YouTube</a>
                 </div>
             </div>
         </div>
